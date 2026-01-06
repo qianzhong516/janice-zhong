@@ -43,5 +43,5 @@ jobs:
       - name: Upload to S3
         run: aws s3 sync ./out s3://janice-zhong --delete
 
-      # - name: Invalidate CloudFront Cache
-      #   run: aws create-invalidation --distribution-id E1TYOGUL5GMN5T
+      - name: Invalidate CloudFront Cache
+        run: aws create-invalidation --distribution-id E1TYOGUL5GMN5T
