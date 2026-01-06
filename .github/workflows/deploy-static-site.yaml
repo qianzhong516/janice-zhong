@@ -2,6 +2,8 @@ name: Deploy Static Site
 on:
   push:
     branches: [main]
+permissions:
+  id-token: write
 jobs:
   Deploy-static-site:
     runs-on: ubuntu-latest
