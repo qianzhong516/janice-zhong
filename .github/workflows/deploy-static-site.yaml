@@ -1,0 +1,40 @@
+name: Deploy Static Site
+on:
+  push:
+    branches: [main]
+jobs:
+  Deploy-static-site:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Set up Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24.12.0
+          cache: "pnpm"
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v5.1.1
+        with:
+          role-to-assume: arn:aws:iam::077437902719:role/github-oidc-janice-zhong-resume
+          aws-region: ap-southeast-2
+
+      - name: Enable pnpm
+        run: corepack enable
+
+      - name: Install dependencies
+        run: pnpm install
+
+      # - name: Run tests
+      #   run: pnpm test
+
+      - name: lint
+        run: pnpm lint
+
+      - name: Build
+        run: pnpm build
+
+      - name: Upload to s3s
+        run: aws s3 sync ./out s3://janice-zhong --delete --debug
