@@ -13,16 +13,18 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version: 24.12.0
-          cache: "pnpm"
+
+      - uses: pnpm/action-setup@v4
+        name: Install pnpm
+        with:
+          version: 10
+          cache: true
 
       - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v5.1.1
+        uses: aws-actions/configure-aws-credentials@v5
         with:
           role-to-assume: arn:aws:iam::077437902719:role/github-oidc-janice-zhong-resume
           aws-region: ap-southeast-2
-
-      - name: Enable pnpm
-        run: corepack enable
 
       - name: Install dependencies
         run: pnpm install
