@@ -28,9 +28,10 @@ export default function Home() {
   const { data, error, isLoading } = useSWR(API_URL, fetcher);
 
   useEffect(() => {
-    incrementVisits(API_URL);
-    // revalidate cache and trigger a refetch
-    mutate(API_URL);
+    incrementVisits(API_URL).then(() => {
+      // revalidate cache and trigger a refetch
+      mutate(API_URL);
+    });
   }, []);
 
   return (

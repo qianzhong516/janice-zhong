@@ -30,7 +30,7 @@ jobs:
           aws-region: ap-southeast-2
 
       - name: Set up Cypress binary cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ~/.cache/Cypress
           key: cypress-${{ runner.os }}-cypress-${{ hashFiles('pnpm-lock.yaml') }}
@@ -65,3 +65,4 @@ jobs:
         env:
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
           CYPRESS_BASE_URL: ${{ vars.CYPRESS_BASE_URL }}
+          API_DOMAIN: ${{ vars.API_DOMAIN }}
