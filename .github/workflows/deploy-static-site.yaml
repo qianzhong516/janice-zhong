@@ -62,5 +62,6 @@ jobs:
           install: false
           browser: chrome
           record: true
+          supportFile: false
         env:
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
