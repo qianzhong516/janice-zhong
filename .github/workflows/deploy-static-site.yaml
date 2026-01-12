@@ -30,6 +30,7 @@ jobs:
           aws-region: ap-southeast-2
 
       - name: Set up Cypress binary cache
+        id: cypress-cache
         uses: actions/cache@v4
         with:
           path: ~/.cache/Cypress
@@ -39,6 +40,7 @@ jobs:
         run: pnpm i --frozen-lockfile
 
       - name: Install Cypress binary
+        if: steps.cypress-cache.outputs.cache-hit != 'true'
         run: npx cypress install
 
       # - name: Run tests
