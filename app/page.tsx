@@ -21,7 +21,9 @@ const incrementVisits = async (url: string) => {
   return response.json();
 };
 
-const API_URL = "https://api.janice-zhong.com/visits";
+const API_URL = process.env.NEXT_PUBLIC_API_DOMAIN
+  ? `${process.env.NEXT_PUBLIC_API_DOMAIN}/visits`
+  : "https://api.staging.janice-zhong.com/visits";
 
 export default function Home() {
   const { mutate } = useSWRConfig();

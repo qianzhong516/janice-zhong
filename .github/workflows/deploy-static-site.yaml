@@ -53,6 +53,8 @@ jobs:
         run: pnpm lint
 
       - name: Build
+        env:
+          NEXT_PUBLIC_API_DOMAIN: ${{ vars.API_DOMAIN }}
         run: pnpm build
 
       - name: Upload to S3
