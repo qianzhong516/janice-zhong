@@ -7,6 +7,11 @@ permissions:
 jobs:
   Deploy-static-site:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        env: [Staging, Prod]
+    if: (matrix.env == 'Staging' && github.ref == 'refs/heads/main') || (matrix.env == 'Prod' && startsWith(github.ref, 'refs/heads/release/'))
+    environment: ${{ matrix.env }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
@@ -26,7 +31,7 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v5
         with:
-          role-to-assume: arn:aws:iam::077437902719:role/github-oidc-janice-zhong-resume
+          role-to-assume: ${{ vars.OIDC_ROLE_ARN }}
           aws-region: ap-southeast-2
 
       - name: Set up Cypress binary cache
@@ -53,10 +58,10 @@ jobs:
         run: pnpm build
 
       - name: Upload to S3
-        run: aws s3 sync ./out s3://janice-zhong --delete
+        run: aws s3 sync ./out ${{ vars.S3_URL }} --delete
 
       - name: Invalidate CloudFront Cache
-        run: aws cloudfront create-invalidation --distribution-id E1TYOGUL5GMN5T --paths "/*"
+        run: aws cloudfront create-invalidation --distribution-id ${{ vars.CLOUDFRONT_DISTRIBUTION_ID }} --paths "/*"
 
       - name: Run Cypress smoke tests
         uses: cypress-io/github-action@v6
