@@ -1,17 +1,15 @@
 name: Deploy Static Site
 on:
   push:
-    branches: [main]
+    branches: [main, release/**]
+
 permissions:
   id-token: write
+
 jobs:
   Deploy-static-site:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        env: [Staging, Prod]
-    if: (matrix.env == 'Staging' && github.ref == 'refs/heads/main') || (matrix.env == 'Prod' && startsWith(github.ref, 'refs/heads/release/'))
-    environment: ${{ matrix.env }}
+    environment: ${{ github.ref == 'refs/heads/main' && 'Staging' || 'Prod' }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
