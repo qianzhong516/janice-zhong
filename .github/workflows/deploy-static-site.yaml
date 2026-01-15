@@ -9,7 +9,7 @@ permissions:
 jobs:
   Deploy-static-site:
     runs-on: ubuntu-latest
-    environment: ${{ github.ref == 'refs/heads/main' && 'Staging' || 'Prod' }}
+    environment: ${{ github.ref == 'refs/heads/main' && 'Staging' || startsWith(github.ref, 'refs/heads/release/') && 'Prod' }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
@@ -37,7 +37,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.cache/Cypress
-          key: cypress-${{ runner.os }}-cypress-${{ hashFiles('pnpm-lock.yaml') }}
+          key: cypress-${{ github.ref_name }}-${{ runner.os }}-cypress-${{ hashFiles('pnpm-lock.yaml') }}
 
       - name: Install dependencies
         run: pnpm i --frozen-lockfile
